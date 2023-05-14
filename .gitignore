@@ -2,5 +2,7 @@
 dist
 .idea
 
+node_modules
+
 INI.txt
 BKMVDATA.txt
