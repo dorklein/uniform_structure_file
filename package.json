@@ -1,0 +1,16 @@
+{
+  "name": "uniform_structure_file",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "run": "tsup src/index.ts --watch --onSuccess \"node dist/index.js\""
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^20.1.4",
+    "tsup": "^6.7.0"
+  }
+}
