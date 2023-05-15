@@ -125,6 +125,7 @@ export const bkmvdataFormat: BKMVDATAFormat = {
         startAt: 38,
         endAt: 45,
         required: true,
+        default: '&OF1.31&',
       },
       {
         fieldId: 1155,
@@ -147,7 +148,7 @@ export const bkmvdataFormat: BKMVDATAFormat = {
       },
     ],
   },
-  c100Row: {
+  C100Row: {
     cells: [
       {
         fieldId: 1200,
@@ -204,7 +205,7 @@ export const bkmvdataFormat: BKMVDATAFormat = {
         fieldId: 1205,
         name: 'documentCreationDate',
         description: 'תאריך הפקת מסמך',
-        type: 'number',
+        type: 'date',
         length: 8,
         startAt: 46,
         endAt: 53,
@@ -214,7 +215,7 @@ export const bkmvdataFormat: BKMVDATAFormat = {
         fieldId: 1206,
         name: 'documentCreationTime',
         description: 'שעת הפקת מסמך',
-        type: 'number',
+        type: 'time',
         length: 4,
         startAt: 54,
         endAt: 57,
@@ -316,7 +317,7 @@ export const bkmvdataFormat: BKMVDATAFormat = {
         fieldId: 1216,
         name: 'valueDate',
         description: 'תאריך ערך',
-        type: 'number',
+        type: 'date',
         length: 8,
         startAt: 262,
         endAt: 269,
@@ -438,7 +439,7 @@ export const bkmvdataFormat: BKMVDATAFormat = {
         fieldId: 1230,
         name: 'documentDate',
         description: 'תאריך המסמך',
-        type: 'number',
+        type: 'date',
         length: 8,
         startAt: 401,
         endAt: 408,
@@ -544,12 +545,12 @@ export const bkmvdataFormat: BKMVDATAFormat = {
         startAt: 46,
         endAt: 49,
         type: 'number',
-        name: 'lineNumberInDocument',
+        name: 'lineNumber',
         description: 'מספר שורה במסמך',
         fieldId: 1255,
       },
       {
-        required: true,
+        required: false,
         length: 3,
         startAt: 50,
         endAt: 52,
@@ -559,7 +560,7 @@ export const bkmvdataFormat: BKMVDATAFormat = {
         fieldId: 1256,
       },
       {
-        required: true,
+        required: false,
         length: 20,
         startAt: 53,
         endAt: 72,
@@ -695,7 +696,7 @@ export const bkmvdataFormat: BKMVDATAFormat = {
         length: 8,
         startAt: 297,
         endAt: 304,
-        type: 'number',
+        type: 'date',
         name: 'documentDate',
         description: 'תאריך המסמך',
         fieldId: 1272,
@@ -721,7 +722,7 @@ export const bkmvdataFormat: BKMVDATAFormat = {
         fieldId: 1274,
       },
       {
-        required: true,
+        required: false,
         length: 21,
         startAt: 319,
         endAt: 339,
@@ -750,7 +751,7 @@ export const bkmvdataFormat: BKMVDATAFormat = {
         startAt: 5,
         endAt: 13,
         type: 'number',
-        name: 'recordNumber',
+        name: 'runningNumber',
         description: 'מס רשומה בקובץ',
         fieldId: 1301,
       },
@@ -790,7 +791,7 @@ export const bkmvdataFormat: BKMVDATAFormat = {
         startAt: 46,
         endAt: 49,
         type: 'number',
-        name: 'lineNumberInDocument',
+        name: 'lineNumber',
         description: 'מספר שורה במסמך',
         fieldId: 1305,
       },
@@ -845,13 +846,18 @@ export const bkmvdataFormat: BKMVDATAFormat = {
         fieldId: 1310,
       },
       {
-        required: (input, item) =>
-          item.paymentMethod === PaymentMethod.CHECK ||
-          item.paymentMethod === PaymentMethod.CREDIT_CARD,
+        required: (input, item) => {
+          const required =
+            item.paymentMethod === PaymentMethod.CHECK ||
+            item.paymentMethod === PaymentMethod.CREDIT_CARD
+          if (!required) return false
+
+          return '"paymentDueDate" is required for "check" or "credit card" payment method'
+        },
         length: 8,
         startAt: 96,
         endAt: 103,
-        type: 'number',
+        type: 'date',
         name: 'paymentDueDate',
         description: 'תאריך הפירעון של ההמחאה /\nהתשלום',
         fieldId: 1311,
@@ -914,7 +920,7 @@ export const bkmvdataFormat: BKMVDATAFormat = {
         length: 8,
         startAt: 148,
         endAt: 155,
-        type: 'number',
+        type: 'date',
         name: 'documentDate',
         description: 'תאריך המסמך',
         fieldId: 1322,
@@ -930,7 +936,7 @@ export const bkmvdataFormat: BKMVDATAFormat = {
         fieldId: 1323,
       },
       {
-        required: true,
+        required: false,
         length: 60,
         startAt: 163,
         endAt: 222,
@@ -1068,7 +1074,7 @@ export const bkmvdataFormat: BKMVDATAFormat = {
         length: 8,
         startAt: 157,
         endAt: 164,
-        type: 'number',
+        type: 'date',
         name: 'date',
         description: 'תאריך',
         fieldId: 1362,
@@ -1078,7 +1084,7 @@ export const bkmvdataFormat: BKMVDATAFormat = {
         length: 8,
         startAt: 165,
         endAt: 172,
-        type: 'number',
+        type: 'date',
         name: 'valueDate',
         description: 'תאריך ערך',
         fieldId: 1363,
@@ -1190,7 +1196,7 @@ export const bkmvdataFormat: BKMVDATAFormat = {
         length: 8,
         startAt: 276,
         endAt: 283,
-        type: 'number',
+        type: 'date',
         name: 'entryDate',
         description: 'תאריך הזנה',
         fieldId: 1375,

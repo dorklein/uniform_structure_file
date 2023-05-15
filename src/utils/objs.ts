@@ -35,3 +35,17 @@ export const flattenObj = (ob: Dictionary): Dictionary => {
   }
   return result
 }
+
+export function getNestedValue(obj: any, key: string) {
+  if (!isObject(obj)) return obj
+
+  const keys = key.split('.')
+  let value = obj
+  for (const key of keys) {
+    const newValue = value[key]
+    if (!isObject(newValue)) return newValue
+
+    value = newValue
+  }
+  return value
+}

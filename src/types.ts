@@ -138,10 +138,15 @@ export interface CustomerOrVendor {
   name: string
   address?: CustomerOrVendorAddress
   phone?: string
-  key?: string
+  key: string
 }
 
 export interface DocumentItem {
+  // documentType: DocumentType
+  // documentNumber: string
+  lineNumber: number
+  documentTypeBase?: number
+  documentNumberBase?: string
   transactionType: TransactionType
   catalogId?: string
   description: string
@@ -156,6 +161,7 @@ export interface DocumentItem {
 }
 
 export interface DocumentPayment {
+  lineNumber: number
   paymentMethod: PaymentMethod
   bankId?: string
   branchId?: string
@@ -224,18 +230,23 @@ export interface InventoryItem {
 }
 export interface DocumentRecord {
   documentType: DocumentType
-  documentNumber: number
+  documentNumber: string
   documentCreationDate: Date
+  documentCreationTime: Date
   customerOrVendor: CustomerOrVendor
+  matchingField?: string
+  isCanceled?: number
+  documentDate: Date
   valueDate: Date
   finalSumInForeignCurrency?: number
   currencyCode?: string
-  documentSumBeforeDiscount?: string
+  documentSumBeforeDiscount: string
   discount?: string
   documentSumAfterDiscountExcludingVat?: string
   vatSum?: string
   documentSumIncludingVat?: string
   deductionAtSourceSum?: string
+  linkField: string
 
   // D110
   items: DocumentItem[]
@@ -259,11 +270,20 @@ export interface UniformStructureInput {
   documents: DocumentRecord[]
 }
 
+export type CellType =
+  | 'string'
+  | 'number'
+  | 'positive'
+  | 'negative'
+  | 'boolean'
+  | 'date'
+  | 'time'
+  | 'datetime'
 export interface Cell<T = undefined> {
   fieldId: number
   name?: string
   description: string
-  type: 'string' | 'number' | 'positive' | 'negative' | 'boolean'
+  type: CellType
   length: number
   startAt: number
   endAt: number
@@ -273,7 +293,10 @@ export interface Cell<T = undefined> {
    * @param input The input object
    * @param item The item object for when it in an array or in a nested array
    */
-  required: boolean | ((input: UniformStructureInput, item: T) => boolean)
+  required:
+    | boolean
+    | string
+    | ((input: UniformStructureInput, item: T) => boolean | string)
 }
 
 export interface Row<T = undefined> {
@@ -288,8 +311,8 @@ export interface INIFormat {
 export interface BKMVDATAFormat {
   header: Row
   footer: Row
-  c100Row: Row<DocumentRecord>
-  D110Row: Row
+  C100Row: Row<DocumentRecord>
+  D110Row: Row<DocumentItem>
   D120Row: Row<DocumentPayment>
   B100Row: Row
   B110Row: Row
