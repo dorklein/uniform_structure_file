@@ -7,7 +7,7 @@ import {
     SoftwareType,
     UniformStructureInput
 } from "../src/types";
-import {createINI} from "../src";
+import {createINI} from "../src/createINI";
 
 const input: UniformStructureInput = {
     software: {
