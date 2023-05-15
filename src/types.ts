@@ -1,3 +1,5 @@
+export type Dictionary<T = unknown> = { [key: string]: T }
+
 export enum HasBranches {
   NO = 0,
   YES = 1,
@@ -124,8 +126,122 @@ export enum CreditCardTransactionType {
   OTHER = 5,
 }
 
+/**
+ * 1 - חובה, הוצאה; 2 - זכות, הכנסה
+ */
+export enum ActionType {
+  DEBIT = 1,
+  CREDIT = 2,
+}
+export interface CustomerOrVendor {
+  taxId?: number
+  name: string
+  address?: CustomerOrVendorAddress
+  phone?: string
+  key?: string
+}
+
+export interface DocumentItem {
+  transactionType: TransactionType
+  catalogId?: string
+  description: string
+  manufacturerName?: string
+  manufacturerSerialNumber?: string
+  unitOfMeasure?: string
+  quantity: string
+  unitPriceExcludingVAT: string
+  lineDiscount?: string
+  lineTotal: string
+  lineVATRate: number
+}
+
+export interface DocumentPayment {
+  paymentMethod: PaymentMethod
+  bankId?: string
+  branchId?: string
+  accountNumber?: string
+  checkNumber?: string
+  paymentDueDate?: Date
+  amount: string
+  creditCardCompany?: CreditCardCompany
+  creditCardName?: string
+  creditCardTransactionType?: CreditCardTransactionType
+}
+
+// B100
+export interface AccountingActions {
+  transactionNumber: number
+  transactionLineNumber: number
+  dish?: number
+  reference?: string
+  referenceDocumentType?: DocumentType
+  reference2?: string
+  reference2DocumentType?: DocumentType
+  details?: string
+  date: Date
+  valueDate: Date
+  accountKey?: string
+  contraAccountKey?: string
+  actionType: ActionType
+  currencyCode?: string
+  amount: string
+  foreignCurrencyAmount?: string
+  quantity?: string
+  matchField1?: string
+  matchField2?: string
+  entryDate: Date
+  userWhoMadeTheAction?: string
+}
+
+export interface AccountingAccount {
+  // B110
+  accountKey: string
+  accountName: string
+  accountBalanceCode: string
+  accountBalanceCodeDescription: string
+  centerAccount?: string
+  openingBalance: string
+  totalDebit: string
+  totalCredit: string
+  govClassificationCode?: number
+  openingBalanceInForeignCurrency?: string
+}
+
+export interface InventoryItem {
+  //  M100
+  universalItemCode?: string
+  supplierItemCode?: string
+  internalItemCode: string
+  itemName: string
+  sortingCode?: string
+  sortingCodeDescription?: string
+  unitOfMeasure: string
+  openingBalance: string
+  totalEntries: string
+  totalOutputs: string
+  costPriceOutside?: number
+  costPrice?: number
+}
 export interface DocumentRecord {
   documentType: DocumentType
+  documentNumber: number
+  documentCreationDate: Date
+  customerOrVendor: CustomerOrVendor
+  valueDate: Date
+  finalSumInForeignCurrency?: number
+  currencyCode?: string
+  documentSumBeforeDiscount?: string
+  discount?: string
+  documentSumAfterDiscountExcludingVat?: string
+  vatSum?: string
+  documentSumIncludingVat?: string
+  deductionAtSourceSum?: string
+
+  // D110
+  items: DocumentItem[]
+
+  // D120
+  payments: DocumentPayment[]
 }
 
 export interface UniformStructureInput {
@@ -139,9 +255,11 @@ export interface UniformStructureInput {
   leadingCurrency: string
   encoding: FileEncoding
   compressionSoftware: string
+
+  documents: DocumentRecord[]
 }
 
-export interface BaseCell {
+export interface Cell<T = undefined> {
   fieldId: number
   name?: string
   description: string
@@ -150,21 +268,16 @@ export interface BaseCell {
   startAt: number
   endAt: number
   default?: string | number
-}
-export interface Cell extends BaseCell {
-  required: boolean | ((input: UniformStructureInput) => boolean)
+
+  /**
+   * @param input The input object
+   * @param item The item object for when it in an array or in a nested array
+   */
+  required: boolean | ((input: UniformStructureInput, item: T) => boolean)
 }
 
-export interface Row {
-  cells: Cell[]
-}
-
-export interface DocumentCell extends BaseCell {
-  required: boolean | ((input: DocumentRecord) => boolean)
-}
-
-export interface DocumentRow {
-  cells: DocumentCell[]
+export interface Row<T = undefined> {
+  cells: Cell<T>[]
 }
 
 export interface INIFormat {
@@ -175,10 +288,10 @@ export interface INIFormat {
 export interface BKMVDATAFormat {
   header: Row
   footer: Row
-  c100Row: DocumentRow
-  D110Row: DocumentRow
-  D120Row: DocumentRow
-  B100Row: DocumentRow
-  B110Row: DocumentRow
-  M100Row: DocumentRow
+  c100Row: Row<DocumentRecord>
+  D110Row: Row
+  D120Row: Row<DocumentPayment>
+  B100Row: Row
+  B110Row: Row
+  M100Row: Row
 }
