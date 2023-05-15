@@ -5,8 +5,5 @@ export default defineConfig({
   splitting: false,
   sourcemap: true,
   clean: true,
-  dts: {
-    entry: 'src/types.d.ts',
-    resolve: true,
-  },
+
 })
