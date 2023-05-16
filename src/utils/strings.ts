@@ -8,19 +8,13 @@ export function isString(obj: unknown): obj is string {
   return typeof obj === 'string' || obj instanceof String
 }
 
-export const emptyByLength = (length: number): string =>
-  Array(length).fill(' ').join('')
 export const padNumbers = (number: number, length: number): string => {
   const str = number.toString()
-  return (
-    Array(length - str.length)
-      .fill('0')
-      .join('') + str
-  )
+  return str.padStart(length, '0')
 }
 
 export const padString = (str: string, length: number): string => {
-  return str + emptyByLength(length - str.length)
+  return str.padEnd(length, ' ')
 }
 
 function padEmptyByType(type: CellType, length: number) {

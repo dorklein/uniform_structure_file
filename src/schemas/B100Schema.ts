@@ -1,4 +1,5 @@
 import { HasBranches, Row } from '../types'
+import { isValidDate } from '../utils/validators'
 
 export const B100Schema: Row = {
   cells: [
@@ -132,6 +133,7 @@ export const B100Schema: Row = {
       name: 'date',
       description: 'תאריך',
       fieldId: 1362,
+      validator: isValidDate,
     },
     {
       required: true,
@@ -142,6 +144,7 @@ export const B100Schema: Row = {
       name: 'valueDate',
       description: 'תאריך ערך',
       fieldId: 1363,
+      validator: isValidDate,
     },
     {
       required: false,
@@ -254,6 +257,7 @@ export const B100Schema: Row = {
       name: 'entryDate',
       description: 'תאריך הזנה',
       fieldId: 1375,
+      validator: isValidDate,
     },
     {
       required: false,

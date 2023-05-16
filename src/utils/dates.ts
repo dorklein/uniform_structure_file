@@ -15,11 +15,9 @@ export function dateToYYYYMMDD(date: Date): string {
     month: '2-digit',
     day: '2-digit',
   })
-  const [] = dateFormatter.formatToParts()
-  const strDate = `${date.getFullYear()}${date.getMonth()}${date.getDay()}`
-  console.log(strDate, date)
-
-  return strDate
+  // we need to use the parts to get the correct date
+  const parts = dateFormatter.formatToParts(date)
+  return `${parts[4].value}${parts[2].value}${parts[0].value}`
 }
 
 /**
@@ -27,7 +25,7 @@ export function dateToYYYYMMDD(date: Date): string {
  * @param date
  */
 export function dateToHHMM(date: Date): string {
-  const dateFormatter = new Intl.DateTimeFormat('en-US', {
+  const dateFormatter = new Intl.DateTimeFormat('he-IL', {
     hour: '2-digit',
     minute: '2-digit',
     hour12: false,

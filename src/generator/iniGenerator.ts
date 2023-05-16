@@ -1,16 +1,10 @@
 import { BaseGenerator } from './baseGenerator'
-import {
-  BKMVDATARowsCount,
-  Cell,
-  Dictionary,
-  UniformStructureInput,
-} from '../types'
+import { BKMVDATARowsCount, Cell, UniformStructureInput } from '../types'
 import { getNestedValue } from '../utils/objs'
-import { createRow } from '../createRow'
 import { iniSchema } from '../schemas/iniSchema'
 import { padByType } from '../utils/strings'
-import { dateToHHMM, dateToMMDDhhmm, dateToYYYYMMDD } from '../utils/dates'
 import * as path from 'path'
+import { expectedINILineLength } from '../utils/constants'
 
 export class IniGenerator extends BaseGenerator {
   #BKMVDATARowsCount: BKMVDATARowsCount
@@ -38,7 +32,36 @@ export class IniGenerator extends BaseGenerator {
     )
   }
 
-  protected validateBeforeSave(): void {}
+  private validateHeader(): void {
+    // recordCode
+    const recordCode = 'A000'
+    const line = this.lines[0]
+    if (!line.startsWith(recordCode)) {
+      throw new Error(`INI.txt first line should start with ${recordCode}`)
+    }
+  }
+
+  private validateLength(): void {
+    for (const line of this.lines) {
+      const recordCode = line.substring(0, 4)
+      const actualLength = line.length
+
+      const expectedLength = expectedINILineLength[recordCode]
+      if (actualLength !== expectedLength) {
+        throw new Error(
+          `INI.txt ${recordCode} line length should be ${expectedLength}. Actual ${line.length}`
+        )
+      }
+    }
+  }
+
+  protected validateBeforeSave(): void {
+    // Validate header
+    this.validateHeader()
+
+    // Validate line length
+    this.validateLength()
+  }
 
   createINIHeader(): void {
     const getValue = (cell: Cell) => {

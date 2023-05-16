@@ -1,4 +1,5 @@
 import { DocumentPayment, HasBranches, PaymentMethod, Row } from '../types'
+import { isOptionalValidDate, isValidDate } from '../utils/validators'
 
 const requiredWhen = (fieldId: number, fieldName: string, when: string) => {
   return `[${fieldId}:${fieldName}] is required when ${when}`
@@ -165,6 +166,7 @@ export const D120Schema: Row<DocumentPayment> = {
       name: 'paymentDueDate',
       description: 'תאריך הפירעון של ההמחאה /\nהתשלום',
       fieldId: 1311,
+      validator: isOptionalValidDate,
     },
     {
       required: true,
@@ -234,6 +236,7 @@ export const D120Schema: Row<DocumentPayment> = {
       name: 'documentDate',
       description: 'תאריך המסמך',
       fieldId: 1322,
+      validator: isValidDate,
     },
     {
       required: true,

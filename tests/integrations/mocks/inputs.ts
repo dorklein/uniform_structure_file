@@ -17,7 +17,7 @@ export const inputMock: UniformStructureInput = {
     version: '6.0',
     companyTaxId: 514756428,
     companyName: 'GREEN INVOICE LTD',
-    type: SoftwareType.singleYear,
+    type: SoftwareType.SINGLE_YEAR,
     accountingType: SoftwareAccountingType.singleEntry,
   },
   business: {
@@ -51,7 +51,7 @@ export const fullInputMock: UniformStructureInput = {
     version: '6.0',
     companyTaxId: 514756428,
     companyName: 'GREEN INVOICE LTD',
-    type: SoftwareType.singleYear,
+    type: SoftwareType.SINGLE_YEAR,
     accountingType: SoftwareAccountingType.singleEntry,
   },
   business: {

@@ -1,6 +1,6 @@
 import { Dictionary } from '../types'
 
-export const expectedINILineLength = {
+export const expectedINILineLength: Dictionary<number> = {
   A000: 466,
   B100: 19,
   B110: 19,

@@ -1,4 +1,5 @@
 import { DocumentRecord, Row } from '../types'
+import { isValidDate } from '../utils/validators'
 
 export const C100Schema: Row<DocumentRecord> = {
   cells: [
@@ -62,6 +63,7 @@ export const C100Schema: Row<DocumentRecord> = {
       startAt: 46,
       endAt: 53,
       required: true,
+      validator: isValidDate,
     },
     {
       fieldId: 1206,
@@ -174,6 +176,7 @@ export const C100Schema: Row<DocumentRecord> = {
       startAt: 262,
       endAt: 269,
       required: true,
+      validator: isValidDate,
     },
     {
       fieldId: 1217,
@@ -296,6 +299,7 @@ export const C100Schema: Row<DocumentRecord> = {
       startAt: 401,
       endAt: 408,
       required: true,
+      validator: isValidDate,
     },
     {
       fieldId: 1231,

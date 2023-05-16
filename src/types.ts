@@ -27,8 +27,8 @@ export interface BusinessData {
 }
 
 export enum SoftwareType {
-  singleYear = 1,
-  multiYear = 2,
+  SINGLE_YEAR = 1,
+  MULTI_YEAR = 2,
 }
 
 export enum SoftwareAccountingType {
@@ -299,6 +299,8 @@ export interface Cell<T = undefined> {
     | boolean
     | string
     | ((input: UniformStructureInput, item: T) => boolean | string)
+
+  validator?: (value: string | number | Date | undefined) => boolean | string
 }
 
 export interface Row<T = undefined> {

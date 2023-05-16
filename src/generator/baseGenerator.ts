@@ -73,11 +73,21 @@ export abstract class BaseGenerator {
     let text = ''
 
     for (const cell of rowSchema.cells) {
+      let cellText = ''
       const value = getValue(cell)
 
-      if (cell.name === 'documentDate') {
-        console.log(`val ${value}`, cell)
+      // validate value
+      if (cell.validator !== undefined) {
+        const valid = cell.validator(value)
+        if (!valid || isString(valid)) {
+          throw new Error(
+            `Invalid value for [${cell.fieldId}:${cell.name}] ${
+              isString(valid) ? valid : ''
+            }`
+          )
+        }
       }
+
       if (value === undefined) {
         // Check if required is a function
         let required = cell.required
@@ -93,7 +103,7 @@ export abstract class BaseGenerator {
           )
         }
 
-        text += padByType(cell.type, null, cell.length)
+        cellText = padByType(cell.type, null, cell.length)
       } else {
         // Check if the value given isn't longer than the supported length
         if (
@@ -104,16 +114,17 @@ export abstract class BaseGenerator {
             `Value for [${cell.fieldId}:${cell.name}] ${value} is longer than ${cell.length}`
           )
 
-        try {
-          text += padByType(cell.type, value as number | string, cell.length)
-        } catch (e) {
-          console.log(`lll: ${e} - ${value} = ${JSON.stringify(cell)}`)
-        }
-
-        if (cell.name === 'documentDate') {
-          console.log(`text `, [text.slice(-8)], cell)
-        }
+        cellText = padByType(cell.type, value as number | string, cell.length)
       }
+
+      // Validate length
+      if (cellText.length !== cell.length) {
+        throw new Error(
+          `Value for [${cell.fieldId}:${cell.name}] ${value} should be of length ${cell.length}`
+        )
+      }
+
+      text += cellText
     }
 
     this.#lines.push(text)

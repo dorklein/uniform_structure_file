@@ -1,4 +1,9 @@
 import { INISchema, Row, SoftwareType } from '../types'
+import {
+  isOptionalValidDate,
+  isValidDate,
+  isValidSSN,
+} from '../utils/validators'
 
 const header: Row = {
   cells: [
@@ -42,6 +47,7 @@ const header: Row = {
       startAt: 25,
       endAt: 33,
       required: true,
+      validator: isValidSSN,
     },
     {
       fieldId: 1004,
@@ -103,6 +109,7 @@ const header: Row = {
       startAt: 105,
       endAt: 113,
       required: true,
+      validator: isValidSSN,
     },
     {
       fieldId: 1010,
@@ -163,6 +170,7 @@ const header: Row = {
       startAt: 187,
       endAt: 195,
       required: false,
+      validator: isValidSSN,
     },
     {
       fieldId: 1016,
@@ -242,7 +250,9 @@ const header: Row = {
       length: 4,
       startAt: 363,
       endAt: 366,
-      required: (input) => input.software.type === SoftwareType.singleYear,
+      required: (input) =>
+        input.software.type === SoftwareType.SINGLE_YEAR &&
+        `taxYear is required when software.type is ${SoftwareType.SINGLE_YEAR}`,
     },
     {
       fieldId: 1024,
@@ -252,7 +262,10 @@ const header: Row = {
       length: 8,
       startAt: 367,
       endAt: 374,
-      required: (input) => input.software.type === SoftwareType.multiYear,
+      required: (input) =>
+        input.software.type === SoftwareType.MULTI_YEAR &&
+        `dataRangeEndDate is required when software.type is ${SoftwareType.MULTI_YEAR}`,
+      validator: isOptionalValidDate,
     },
     {
       fieldId: 1025,
@@ -262,7 +275,10 @@ const header: Row = {
       length: 8,
       startAt: 375,
       endAt: 382,
-      required: (input) => input.software.type === SoftwareType.multiYear,
+      required: (input) =>
+        input.software.type === SoftwareType.MULTI_YEAR &&
+        `dataRangeEndDate is required when software.type is ${SoftwareType.MULTI_YEAR}`,
+      validator: isOptionalValidDate,
     },
     {
       fieldId: 1026,
@@ -273,6 +289,7 @@ const header: Row = {
       startAt: 383,
       endAt: 390,
       required: true,
+      validator: isValidDate,
     },
     {
       fieldId: 1027,

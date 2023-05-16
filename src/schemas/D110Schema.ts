@@ -1,4 +1,5 @@
 import { DocumentItem, HasBranches, Row } from '../types'
+import { isValidDate } from '../utils/validators'
 
 export const D110Schema: Row<DocumentItem> = {
   cells: [
@@ -214,6 +215,7 @@ export const D110Schema: Row<DocumentItem> = {
       name: 'documentDate',
       description: 'תאריך המסמך',
       fieldId: 1272,
+      validator: isValidDate,
     },
     {
       required: true,
@@ -231,7 +233,7 @@ export const D110Schema: Row<DocumentItem> = {
       startAt: 312,
       endAt: 318,
       type: 'string',
-      name: 'baseBranchId',
+      name: 'business.branchId',
       description: 'מזהה סניף/ענף למסמך\nבסיס',
       fieldId: 1274,
     },
