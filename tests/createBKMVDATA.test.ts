@@ -45,7 +45,7 @@ const input: UniformStructureInput = {
   processStartDate: new Date(),
   languageCode: LanguageCode.hebrew,
   leadingCurrency: 'ILS',
-  encoding: FileEncoding.IOS_8859_8,
+  encoding: FileEncoding.ISO_8859_8,
   compressionSoftware: 'zip',
 
   documents: [

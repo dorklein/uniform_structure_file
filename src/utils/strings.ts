@@ -23,17 +23,32 @@ export const padString = (str: string, length: number): string => {
   return str + emptyByLength(length - str.length)
 }
 
+function padEmptyByType(type: CellType, length: number) {
+  switch (type) {
+    case 'date':
+    case 'time':
+    case 'number':
+      return padNumbers(0, length)
+    case 'string':
+      return padString('', length)
+    case 'boolean':
+      return '0'
+    case 'positive':
+      return `+${padNumbers(0, length - 1)}`
+    case 'negative':
+      return `-${padNumbers(0, length - 1)}`
+    default:
+      throw new Error(`Invalid type ${type}`)
+  }
+}
 export const padByType = (
   type: CellType,
-  value: string | number | Date,
+  value: string | number | Date | null,
   length: number
 ): string => {
-  if (['date', 'time'].includes(type) && value === '') {
-    type = 'string'
+  if (value === null) {
+    return padEmptyByType(type, length)
   }
-
-  if (value.toString().length > length && !['date', 'time'].includes(type))
-    throw new Error(`Value ${value} is longer than ${length}`)
 
   switch (type) {
     case 'date':

@@ -3,6 +3,7 @@ import * as fs from 'fs/promises'
 import { createINI } from '../../src/createINI'
 import { fullInputMock, inputMock } from './mocks/inputs'
 import { createBKMVDATA } from '../../src/createBKMVDATA'
+import { createFakeInput } from './fakes/inputs'
 
 const expectedLineLength = {
   'INI.TXT': {
@@ -47,7 +48,8 @@ describe('Line length', () => {
   test('BKMVDATA.TXT', async () => {
     const filePath = 'tests/BKMVDATA.txt'
     // Generate the file
-    await createBKMVDATA(fullInputMock, filePath)
+    const input = createFakeInput()
+    await createBKMVDATA(input, filePath)
 
     // Read the file
     const data = await fs.readFile(filePath, 'utf8')
@@ -58,7 +60,7 @@ describe('Line length', () => {
     for (const line of lines) {
       const recordCode = line.substring(0, 4)
       const actualLength = line.length
-      expect(expectedLength[recordCode]).toBe(actualLength)
+      expect(actualLength).toBe(expectedLength[recordCode])
     }
   })
 })

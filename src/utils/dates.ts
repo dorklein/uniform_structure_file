@@ -10,14 +10,16 @@ export function isDate(obj: unknown): obj is Date {
  * @param date
  */
 export function dateToYYYYMMDD(date: Date): string {
-  const dateFormatter = new Intl.DateTimeFormat('en-US', {
+  const dateFormatter = new Intl.DateTimeFormat('he-IL', {
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
   })
-  const strDate = dateFormatter.format(date)
+  const [] = dateFormatter.formatToParts()
+  const strDate = `${date.getFullYear()}${date.getMonth()}${date.getDay()}`
+  console.log(strDate, date)
 
-  return strDate.replace(/\//g, '')
+  return strDate
 }
 
 /**

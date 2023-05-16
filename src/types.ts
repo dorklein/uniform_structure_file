@@ -23,6 +23,7 @@ export interface BusinessData {
   name: string
   address?: BusinessAddress
   hasBranches: HasBranches
+  branchId?: string
 }
 
 export enum SoftwareType {
@@ -59,7 +60,7 @@ export enum LanguageCode {
 }
 
 export enum FileEncoding {
-  IOS_8859_8 = 1,
+  ISO_8859_8 = 1,
   CP_862 = 2,
 }
 
@@ -163,10 +164,10 @@ export interface DocumentItem {
 export interface DocumentPayment {
   lineNumber: number
   paymentMethod: PaymentMethod
-  bankId?: string
-  branchId?: string
-  accountNumber?: string
-  checkNumber?: string
+  bankId?: number
+  branchId?: number
+  accountNumber?: number
+  checkNumber?: number
   paymentDueDate?: Date
   amount: string
   creditCardCompany?: CreditCardCompany
@@ -235,7 +236,7 @@ export interface DocumentRecord {
   documentCreationTime: Date
   customerOrVendor: CustomerOrVendor
   matchingField?: string
-  isCanceled?: number
+  isCanceled?: string
   documentDate: Date
   valueDate: Date
   finalSumInForeignCurrency?: number
@@ -262,6 +263,7 @@ export interface UniformStructureInput {
   dataRangeStartDate?: Date
   dataRangeEndDate?: Date
   processStartDate: Date
+  processStartTime: Date
   languageCode: LanguageCode
   leadingCurrency: string
   encoding: FileEncoding
@@ -281,7 +283,7 @@ export type CellType =
   | 'datetime'
 export interface Cell<T = undefined> {
   fieldId: number
-  name?: string
+  name: string
   description: string
   type: CellType
   length: number
@@ -303,18 +305,27 @@ export interface Row<T = undefined> {
   cells: Cell<T>[]
 }
 
-export interface INIFormat {
+export interface INISchema {
   header: Row
   summaryRow: Row
 }
 
-export interface BKMVDATAFormat {
+export interface BKMVDATASchema {
   header: Row
   footer: Row
-  C100Row: Row<DocumentRecord>
-  D110Row: Row<DocumentItem>
-  D120Row: Row<DocumentPayment>
-  B100Row: Row
-  B110Row: Row
-  M100Row: Row
+  C100: Row<DocumentRecord>
+  D110: Row<DocumentItem>
+  D120: Row<DocumentPayment>
+  B100: Row
+  B110: Row
+  M100: Row
+}
+
+export interface BKMVDATARowsCount extends Dictionary<number> {
+  B100: number
+  B110: number
+  C100: number
+  D110: number
+  D120: number
+  M100: number
 }

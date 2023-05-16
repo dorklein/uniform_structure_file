@@ -1,9 +1,11 @@
-import { iniFormat } from './formats/iniFormat'
+import { iniSchema } from './schemas/iniSchema'
 import { dateToHHMM, dateToMMDDhhmm, dateToYYYYMMDD } from './utils/dates'
 import { Cell, Dictionary, UniformStructureInput } from './types'
 import { flattenObj, getNestedValue, isObject } from './utils/objs'
 import fs from 'fs/promises'
 import { isString, padByType } from './utils/strings'
+import { createRow } from './createRow'
+import { bkmvdataSchema } from './schemas/bkmvdataSchema'
 
 function numberOfRowsInBKMVDATA() {
   return 32
@@ -39,41 +41,15 @@ function computedValues(
 }
 
 export async function createINIHeader(input: UniformStructureInput) {
-  // const flatInput = flattenObj(input as any)
-
-  let header = ''
-  for (const cell of iniFormat.header.cells) {
-    const value =
-      (!!cell.name
-        ? computedValues(cell, input) ?? getNestedValue(input, cell.name)
-        : undefined) ?? cell.default
-
-    if (value !== undefined) {
-      header += padByType(cell.type, value as number | string, cell.length)
-    }
-
-    // If the all header is less than the endAt position, then neither the value nor the default value is set
-    if (header.length < cell.endAt) {
-      // Check if required is a function
-      let required = cell.required
-      if (typeof cell.required === 'function')
-        required = cell.required(input, undefined)
-
-      if (required && !['positive', 'negative'].includes(cell.type)) {
-        // is string
-
-        throw new Error(
-          isString(required)
-            ? required
-            : `Required field [${cell.fieldId}]'${cell.name}'  has no default value.`
-        )
-      }
-      header += padByType(cell.type, '', cell.length)
-    }
+  const getValue = (cell: Cell) => {
+    return (
+      computedValues(cell, input) ??
+      getNestedValue(input, cell.name) ??
+      cell.default
+    )
   }
 
-  header += '\n'
-  return header
+  return createRow(input, iniSchema.header, getValue, undefined)
 }
 
 const recordCodes = ['B100', 'B110', 'C100', 'D110', 'D120', 'M100']
@@ -83,7 +59,7 @@ export async function createINIBody() {
   for (const recordCode of recordCodes) {
     body += recordCode
 
-    const countCellSchema = iniFormat.summaryRow.cells[1]
+    const countCellSchema = iniSchema.summaryRow.cells[1]
     body += padByType(countCellSchema.type, 23, countCellSchema.length)
 
     body += '\n'

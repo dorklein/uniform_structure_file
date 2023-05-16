@@ -37,9 +37,10 @@ const input: UniformStructureInput = {
 
   taxYear: 2020,
   processStartDate: new Date(),
+  processStartTime: new Date(),
   languageCode: LanguageCode.hebrew,
   leadingCurrency: 'ILS',
-  encoding: FileEncoding.IOS_8859_8,
+  encoding: FileEncoding.ISO_8859_8,
   compressionSoftware: 'zip',
 
   documents: [],

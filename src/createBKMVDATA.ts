@@ -1,14 +1,16 @@
 import fs from 'fs/promises'
-import { bkmvdataFormat } from './formats/bkmvdataFormat'
+import { bkmvdataSchema } from './schemas/bkmvdataSchema'
 import {
   Cell,
   DocumentItem,
   DocumentPayment,
   DocumentRecord,
+  Row,
   UniformStructureInput,
 } from './types'
 import { flattenObj, getNestedValue } from './utils/objs'
 import { isString, padByType } from './utils/strings'
+import { createRow } from './createRow'
 
 function computedValues<T = unknown>(
   cell: Cell<T>,
@@ -27,156 +29,70 @@ function computedValues<T = unknown>(
 }
 
 async function createBKMVDATAHeader(input: UniformStructureInput) {
-  // const flatInput = flattenObj(input as any)
-  // console.log(flatInput)
-  // return flatInput
-  //
-  let header = ''
-  for (const cell of bkmvdataFormat.header.cells) {
-    const value =
-      (!!cell.name
-        ? computedValues(cell, input, 0) ?? getNestedValue(input, cell.name)
-        : undefined) ?? cell.default
-
-    if (value !== undefined) {
-      header += padByType(cell.type, value as number | string, cell.length)
-    }
-
-    // If the all header is less than the endAt position, then neither the value nor the default value is set
-    if (header.length < cell.endAt) {
-      // Check if required is a function
-      let required = cell.required
-      if (typeof cell.required === 'function')
-        required = cell.required(input, undefined)
-
-      if (required) {
-        throw new Error(
-          `Required field '${cell.name}' (${cell.description}) has no default value`
-        )
-      }
-      header += padByType(cell.type, '', cell.length)
-    }
+  const getValue = (cell: Cell) => {
+    return (
+      computedValues(cell, input, 0) ??
+      getNestedValue(input, cell.name) ??
+      cell.default
+    )
   }
 
-  header += '\n'
-  return header
+  return createRow(input, bkmvdataSchema.header, getValue, undefined)
 }
 
 async function createC100Row(
   input: UniformStructureInput,
   document: DocumentRecord
 ) {
-  let text = ''
-  for (const cell of bkmvdataFormat.C100Row.cells) {
-    const value =
-      (!!cell.name
-        ? computedValues(cell, input, 0) ??
-          getNestedValue(document, cell.name) ??
-          getNestedValue(input, cell.name)
-        : undefined) ?? cell.default
-
-    if (value !== undefined) {
-      text += padByType(cell.type, value as number | string | Date, cell.length)
-    }
-
-    // If the all header is less than the endAt position, then neither the value nor the default value is set
-    if (text.length < cell.endAt) {
-      // Check if required is a function
-      let required = cell.required
-      if (typeof cell.required === 'function')
-        required = cell.required(input, document)
-
-      if (required && !['positive', 'negative'].includes(cell.type)) {
-        throw new Error(
-          `Required field [${cell.fieldId}]'${cell.name}'  has no default value.`
-        )
-      }
-      text += padByType(cell.type, '', cell.length)
-    }
+  const getValue = (cell: Cell<DocumentRecord>) => {
+    return (
+      computedValues(cell, input, 0) ??
+      getNestedValue(document, cell.name) ??
+      getNestedValue(input, cell.name) ??
+      cell.default
+    )
   }
 
-  text += '\n'
-  return text
+  return createRow<DocumentRecord>(
+    input,
+    bkmvdataSchema.C100,
+    getValue,
+    document
+  )
 }
 async function createD110Row(
   input: UniformStructureInput,
   document: DocumentRecord,
   item: DocumentItem
 ) {
-  let text = ''
-  for (const cell of bkmvdataFormat.D110Row.cells) {
-    const value =
-      (!!cell.name
-        ? computedValues(cell, input, 0) ??
-          getNestedValue(item, cell.name) ??
-          getNestedValue(document, cell.name) ??
-          getNestedValue(input, cell.name)
-        : undefined) ?? cell.default
-
-    if (value !== undefined) {
-      text += padByType(cell.type, value as number | string | Date, cell.length)
-    }
-
-    // If the all header is less than the endAt position, then neither the value nor the default value is set
-    if (text.length < cell.endAt) {
-      // Check if required is a function
-      let required = cell.required
-      if (typeof cell.required === 'function')
-        required = cell.required(input, item)
-
-      if (required && !['positive', 'negative'].includes(cell.type)) {
-        throw new Error(
-          `Required field [${cell.fieldId}]'${cell.name}'  has no default value.`
-        )
-      }
-      text += padByType(cell.type, '', cell.length)
-    }
+  const getValue = (cell: Cell<DocumentItem>) => {
+    return (
+      computedValues(cell, input, 0) ??
+      getNestedValue(item, cell.name) ??
+      getNestedValue(document, cell.name) ??
+      getNestedValue(input, cell.name) ??
+      cell.default
+    )
   }
 
-  text += '\n'
-  return text
+  return createRow<DocumentItem>(input, bkmvdataSchema.D110, getValue, item)
 }
 async function createD120Row(
   input: UniformStructureInput,
   document: DocumentRecord,
   item: DocumentPayment
 ) {
-  let text = ''
-  for (const cell of bkmvdataFormat.D120Row.cells) {
-    const value =
-      (!!cell.name
-        ? computedValues(cell, input, 0) ??
-          getNestedValue(item, cell.name) ??
-          getNestedValue(document, cell.name) ??
-          getNestedValue(input, cell.name)
-        : undefined) ?? cell.default
-
-    if (value !== undefined) {
-      text += padByType(cell.type, value as number | string | Date, cell.length)
-    }
-
-    // If the all header is less than the endAt position, then neither the value nor the default value is set
-    if (text.length < cell.endAt) {
-      // Check if required is a function
-      let required = cell.required
-      if (typeof cell.required === 'function')
-        required = cell.required(input, item)
-
-      if (required && !['positive', 'negative'].includes(cell.type)) {
-        // is string
-
-        throw new Error(
-          isString(required)
-            ? required
-            : `Required field [${cell.fieldId}]'${cell.name}'  has no default value.`
-        )
-      }
-      text += padByType(cell.type, '', cell.length)
-    }
+  const getValue = (cell: Cell<DocumentPayment>) => {
+    return (
+      computedValues(cell, input, 0) ??
+      getNestedValue(item, cell.name) ??
+      getNestedValue(document, cell.name) ??
+      getNestedValue(input, cell.name) ??
+      cell.default
+    )
   }
 
-  text += '\n'
-  return text
+  return createRow<DocumentPayment>(input, bkmvdataSchema.D120, getValue, item)
 }
 
 export async function createBKMVDATABody(input: UniformStructureInput) {
@@ -193,50 +109,27 @@ export async function createBKMVDATABody(input: UniformStructureInput) {
     }
   }
 
-  // text += '\n'
   return text
 }
 
 async function createBKMVDATAFooter(input: UniformStructureInput) {
-  const flatInput = flattenObj(input as any)
-
-  let text = ''
-  for (const cell of bkmvdataFormat.footer.cells) {
-    const value =
-      (!!cell.name
-        ? computedValues(cell, input, 0) ?? flatInput[cell.name]
-        : undefined) ?? cell.default
-
-    if (value !== undefined) {
-      text += padByType(cell.type, value as number | string, cell.length)
-    }
-
-    // If the all text is less than the endAt position, then neither the value nor the default value is set
-    if (text.length < cell.endAt) {
-      // Check if required is a function
-      let required = cell.required
-      if (typeof cell.required === 'function')
-        required = cell.required(input, undefined)
-
-      if (required) {
-        throw new Error(
-          `Required field '${cell.name}' (${cell.description}) has no default value`
-        )
-      }
-      text += padByType(cell.type, '', cell.length)
-    }
+  const getValue = (cell: Cell) => {
+    return (
+      computedValues(cell, input, 0) ??
+      getNestedValue(input, cell.name) ??
+      cell.default
+    )
   }
 
-  text += '\n'
-  return text
+  return createRow(input, bkmvdataSchema.footer, getValue, undefined)
 }
 
 export async function createBKMVDATA(
   input: UniformStructureInput,
   path: string = 'BKMVDATA.txt'
 ) {
-  const header = await createBKMVDATAHeader(input)
   const body = await createBKMVDATABody(input)
+  const header = await createBKMVDATAHeader(input)
   const footer = await createBKMVDATAFooter(input)
 
   let text = header + body + footer
