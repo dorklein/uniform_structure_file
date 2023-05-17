@@ -1,5 +1,5 @@
 import { HasBranches, Row } from '../types'
-import { isValidDate } from '../utils/validators'
+import { isValidCurrencyCode, isValidDate } from '../utils/validators'
 
 export const B100Schema: Row = {
   cells: [
@@ -185,6 +185,7 @@ export const B100Schema: Row = {
       name: 'currencyCode',
       description: 'קוד מטבע מטח',
       fieldId: 1367,
+      validator: isValidCurrencyCode,
     },
     {
       default: '0',

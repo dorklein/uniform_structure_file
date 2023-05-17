@@ -300,7 +300,10 @@ export interface Cell<T = undefined> {
     | string
     | ((input: UniformStructureInput, item: T) => boolean | string)
 
-  validator?: (value: string | number | Date | undefined) => boolean | string
+  validator?: (
+    value: string | number | Date | undefined,
+    item: T
+  ) => boolean | string
 }
 
 export interface Row<T = undefined> {

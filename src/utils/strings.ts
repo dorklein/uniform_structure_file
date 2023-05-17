@@ -28,9 +28,8 @@ function padEmptyByType(type: CellType, length: number) {
     case 'boolean':
       return '0'
     case 'positive':
-      return `+${padNumbers(0, length - 1)}`
     case 'negative':
-      return `-${padNumbers(0, length - 1)}`
+      return `+${padNumbers(0, length - 1)}`
     default:
       throw new Error(`Invalid type ${type}`)
   }
@@ -41,6 +40,11 @@ export const padByType = (
   length: number
 ): string => {
   if (value === null) {
+    return padEmptyByType(type, length)
+  }
+
+  // When negative os 0, should have a + sign instead of a - sign
+  if (type === 'negative' && value === '0') {
     return padEmptyByType(type, length)
   }
 

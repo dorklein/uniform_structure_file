@@ -78,7 +78,7 @@ export abstract class BaseGenerator {
 
       // validate value
       if (cell.validator !== undefined) {
-        const valid = cell.validator(value)
+        const valid = cell.validator(value, item)
         if (!valid || isString(valid)) {
           throw new Error(
             `Invalid value for [${cell.fieldId}:${cell.name}] ${

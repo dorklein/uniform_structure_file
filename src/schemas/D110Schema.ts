@@ -175,6 +175,15 @@ export const D110Schema: Row<DocumentItem> = {
       name: 'lineDiscount',
       description: 'הנחת שורה',
       fieldId: 1266,
+      validator: (value, item) => {
+        const { quantity, unitPriceExcludingVAT } = item
+        const expected = +quantity * +unitPriceExcludingVAT
+
+        return (
+          +(value ?? 0) < expected ||
+          `[1266:lineDiscount] lineDiscount can't be bigger than ${expected}. Got ${value}`
+        )
+      },
     },
     {
       required: true,
@@ -185,6 +194,17 @@ export const D110Schema: Row<DocumentItem> = {
       name: 'lineTotal',
       description: 'סך סכום לשורה',
       fieldId: 1267,
+      validator: (value, item) => {
+        const { quantity, unitPriceExcludingVAT, lineDiscount } = item
+
+        const expected =
+          +quantity * +unitPriceExcludingVAT - +(lineDiscount ?? 0)
+
+        return (
+          value === `${expected}` ||
+          `[1267:lineTotal] Expected ${expected}. Got ${value}`
+        )
+      },
     },
     {
       required: true,

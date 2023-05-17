@@ -68,6 +68,20 @@ function fakeCustomerOrVendor(): CustomerOrVendor {
 }
 
 function fakeItem(): DocumentItem {
+  const quantity = '1'
+  //faker.string.numeric({
+  //   allowLeadingZeros: true,
+  //   length: { min: 1, max: 10 },
+  // })
+  const unitPriceExcludingVAT = '100'
+  //   faker.string.numeric({
+  //   allowLeadingZeros: true,
+  //   length: { min: 1, max: 10 },
+  // })
+  const sum = +quantity * +unitPriceExcludingVAT
+  const lineDiscount = '0' //(sum / faker.number.int({ min: 2, max: 4 })).toFixed(0)
+  const lineTotal = `${sum - +lineDiscount}`
+  const lineVATRate = faker.number.int(4)
   return {
     lineNumber: faker.number.int({ min: 1, max: 9999 }),
     transactionType: faker.helpers.enumValue(TransactionType),
@@ -76,19 +90,10 @@ function fakeItem(): DocumentItem {
     // manufacturerName?: string
     // manufacturerSerialNumber?: string
     // unitOfMeasure?: string
-    quantity: faker.string.numeric({
-      allowLeadingZeros: true,
-      length: { min: 1, max: 16 },
-    }),
-    unitPriceExcludingVAT: faker.string.numeric({
-      allowLeadingZeros: true,
-      length: { min: 1, max: 14 },
-    }),
-    // lineDiscount?: string
-    lineTotal: faker.string.numeric({
-      allowLeadingZeros: true,
-      length: { min: 1, max: 14 },
-    }),
+    quantity,
+    unitPriceExcludingVAT,
+    lineDiscount,
+    lineTotal,
     lineVATRate: faker.number.int(4),
   }
 }
@@ -125,6 +130,24 @@ function fakePayment(): DocumentPayment {
 }
 
 function fakeDocument(): DocumentRecord {
+  const documentSumBeforeDiscount = faker.string.numeric({
+    allowLeadingZeros: true,
+    length: { min: 1, max: 14 },
+  })
+  const discount = faker.string.numeric({
+    allowLeadingZeros: true,
+    length: { min: 1, max: 14 },
+  })
+  const documentSumAfterDiscountExcludingVat = `${
+    +documentSumBeforeDiscount - +discount
+  }`
+  const vatSum = faker.string.numeric({
+    allowLeadingZeros: true,
+    length: { min: 1, max: 14 },
+  })
+  const documentSumIncludingVat = `${
+    +documentSumAfterDiscountExcludingVat + +vatSum
+  }`
   return {
     documentType: faker.helpers.enumValue(DocumentType),
     documentNumber: faker.string.numeric({
@@ -138,23 +161,11 @@ function fakeDocument(): DocumentRecord {
     valueDate: faker.date.past(),
     // finalSumInForeignCurrency?: number
     // currencyCode?: string
-    documentSumBeforeDiscount: faker.string.numeric({
-      allowLeadingZeros: true,
-      length: { min: 1, max: 14 },
-    }),
-    // discount?: string
-    documentSumAfterDiscountExcludingVat: faker.string.numeric({
-      allowLeadingZeros: true,
-      length: { min: 1, max: 14 },
-    }),
-    vatSum: faker.string.numeric({
-      allowLeadingZeros: true,
-      length: { min: 1, max: 14 },
-    }),
-    documentSumIncludingVat: faker.string.numeric({
-      allowLeadingZeros: true,
-      length: { min: 1, max: 14 },
-    }),
+    documentSumBeforeDiscount,
+    discount,
+    documentSumAfterDiscountExcludingVat,
+    vatSum,
+    documentSumIncludingVat,
     deductionAtSourceSum: faker.string.numeric({
       allowLeadingZeros: true,
       length: { min: 1, max: 11 },
@@ -185,7 +196,7 @@ export function createFakeInput(): UniformStructureInput {
     processStartDate: faker.date.past(),
     processStartTime: faker.date.past(),
     languageCode: faker.helpers.enumValue(LanguageCode),
-    leadingCurrency: faker.finance.currencyCode(),
+    leadingCurrency: faker.helpers.arrayElement(['ILS', 'USD', 'EUR']),
     encoding: faker.helpers.enumValue(FileEncoding),
     compressionSoftware: 'zip',
 

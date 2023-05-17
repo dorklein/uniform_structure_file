@@ -1,4 +1,5 @@
 import { HasBranches, Row, SoftwareAccountingType } from '../types'
+import { isOptionalValidCurrencyCode } from '../utils/validators'
 
 export const B110Schema: Row = {
   cells: [
@@ -223,6 +224,7 @@ export const B110Schema: Row = {
       name: 'currencyCode',
       description: 'קוד מטבע יתרת החשבון בתחילת חתך במט"ח',
       fieldId: 1423,
+      validator: isOptionalValidCurrencyCode,
     },
     {
       required: false,

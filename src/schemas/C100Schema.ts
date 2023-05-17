@@ -1,5 +1,5 @@
 import { DocumentRecord, Row } from '../types'
-import { isValidDate } from '../utils/validators'
+import { isOptionalValidCurrencyCode, isValidDate } from '../utils/validators'
 
 export const C100Schema: Row<DocumentRecord> = {
   cells: [
@@ -197,6 +197,7 @@ export const C100Schema: Row<DocumentRecord> = {
       startAt: 285,
       endAt: 287,
       required: false,
+      validator: isOptionalValidCurrencyCode,
     },
     {
       fieldId: 1219,
@@ -227,6 +228,16 @@ export const C100Schema: Row<DocumentRecord> = {
       startAt: 318,
       endAt: 332,
       required: true,
+      validator: (value, item) => {
+        const beforeDiscount = +item.documentSumBeforeDiscount
+        const discount = +(item.discount ?? 0)
+        const expected = beforeDiscount - discount
+
+        return (
+          value === `${expected}` ||
+          `documentSumAfterDiscountExcludingVat (${value}) must be equal to documentSumBeforeDiscount (${beforeDiscount}) - discount (${discount}) = ${expected}`
+        )
+      },
     },
     {
       fieldId: 1222,
@@ -247,6 +258,18 @@ export const C100Schema: Row<DocumentRecord> = {
       startAt: 348,
       endAt: 362,
       required: true,
+      validator: (value, item) => {
+        const vatSum = +(item.vatSum ?? 0)
+        const documentSumAfterDiscountExcludingVat = +(
+          item.documentSumAfterDiscountExcludingVat ?? 0
+        )
+        const expected = documentSumAfterDiscountExcludingVat + vatSum
+
+        return (
+          value === `${expected}` ||
+          'documentSumIncludingVat must be equal to documentSumAfterDiscountExcludingVat + vatSum'
+        )
+      },
     },
     {
       fieldId: 1224,
