@@ -1,5 +1,5 @@
 import { describe, test, expect } from '@jest/globals'
-import { getCheckDigit, ssnValidator } from '../../src/utils/ssnValidator'
+import { getCheckDigit, ssnValidator } from '../../../src/utils/ssnValidator'
 
 describe('ssnValidator', () => {
   test('should pad start with 0 when shorter than 9', () => {
@@ -58,6 +58,14 @@ describe('getCheckDigit', () => {
   test('should return check digit for valid ssn', () => {
     const ssn = '54370042'
     const expectedCheckDigit = 1
+
+    const result = getCheckDigit(ssn)
+
+    expect(result).toBe(expectedCheckDigit)
+  })
+  test('should return check digit when check digit is 10', () => {
+    const ssn = '66673372'
+    const expectedCheckDigit = 0
 
     const result = getCheckDigit(ssn)
 

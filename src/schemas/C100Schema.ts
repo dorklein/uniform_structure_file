@@ -186,6 +186,7 @@ export const C100Schema: Row<DocumentRecord> = {
       length: 15,
       startAt: 270,
       endAt: 284,
+      decimalPlaces: 2,
       required: false,
     },
     {
@@ -207,7 +208,20 @@ export const C100Schema: Row<DocumentRecord> = {
       length: 15,
       startAt: 288,
       endAt: 302,
+      decimalPlaces: 2,
       required: true,
+      validator: (value, item) => {
+        if (!value) return false
+
+        const expected = item.items.reduce(
+          (acc, item) => acc + +item.lineTotal,
+          0
+        )
+        return (
+          +value === expected ||
+          `documentSumBeforeDiscount should be ${expected} (accumulation of the doc's items lineTotal) but got ${value}`
+        )
+      },
     },
     {
       fieldId: 1220,
@@ -217,6 +231,7 @@ export const C100Schema: Row<DocumentRecord> = {
       length: 15,
       startAt: 303,
       endAt: 317,
+      decimalPlaces: 2,
       required: true,
     },
     {
@@ -227,6 +242,7 @@ export const C100Schema: Row<DocumentRecord> = {
       length: 15,
       startAt: 318,
       endAt: 332,
+      decimalPlaces: 2,
       required: true,
       validator: (value, item) => {
         const beforeDiscount = +item.documentSumBeforeDiscount
@@ -247,6 +263,7 @@ export const C100Schema: Row<DocumentRecord> = {
       length: 15,
       startAt: 333,
       endAt: 347,
+      decimalPlaces: 2,
       required: true,
     },
     {
@@ -257,6 +274,7 @@ export const C100Schema: Row<DocumentRecord> = {
       length: 15,
       startAt: 348,
       endAt: 362,
+      decimalPlaces: 2,
       required: true,
       validator: (value, item) => {
         const vatSum = +(item.vatSum ?? 0)
@@ -279,6 +297,7 @@ export const C100Schema: Row<DocumentRecord> = {
       length: 12,
       startAt: 363,
       endAt: 374,
+      decimalPlaces: 2,
       required: true,
     },
     {

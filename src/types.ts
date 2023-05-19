@@ -289,6 +289,7 @@ export interface Cell<T = undefined> {
   length: number
   startAt: number
   endAt: number
+  decimalPlaces?: number
   default?: string | number
 
   /**

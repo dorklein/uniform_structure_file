@@ -19,7 +19,7 @@ function getDirPath(input: UniformStructureInput): string {
 export async function main() {
   const input: UniformStructureInput = createFakeInput()
 
-  const nanoid = customAlphabet('1234567890', 15)
+  const nanoid = customAlphabet('123456789', 15)
   const uuid = nanoid()
 
   const dirPath = getDirPath(input)

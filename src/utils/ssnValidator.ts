@@ -24,5 +24,6 @@ export function getCheckDigit(id: string | number): number {
     incNum = +id[i] * ((i % 2) + 1) // Multiply number by 1 or 2
     sum += incNum > 9 ? incNum - 9 : incNum // Sum the digits up and add to total
   }
-  return 10 - (sum % 10)
+  const checkDigit = 10 - (sum % 10)
+  return checkDigit > 9 ? 0 : checkDigit
 }

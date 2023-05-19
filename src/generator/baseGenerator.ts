@@ -50,7 +50,7 @@ export abstract class BaseGenerator {
   ): number | string | undefined {
     switch (cell.name) {
       case 'uuid':
-        return this.uuid
+        return +this.uuid
       case 'runningNumber':
       case 'totalRecords':
         return this.runningNumber
@@ -107,20 +107,32 @@ export abstract class BaseGenerator {
       } else {
         // Check if the value given isn't longer than the supported length
         if (
-          value.toString().length > cell.length &&
-          !['date', 'time'].includes(cell.type)
+          !['date', 'time'].includes(cell.type) &&
+          (+value).toFixed(cell.decimalPlaces ?? 0).length > cell.length
         )
           throw new Error(
             `Value for [${cell.fieldId}:${cell.name}] ${value} is longer than ${cell.length}`
           )
-
-        cellText = padByType(cell.type, value as number | string, cell.length)
+        try {
+          cellText = padByType(
+            cell.type,
+            value as number | string,
+            cell.length,
+            cell.decimalPlaces
+          )
+        } catch (e) {
+          throw new Error(
+            `Error while padding value for ${JSON.stringify(
+              cell
+            )} - ${value} - ${e}`
+          )
+        }
       }
 
       // Validate length
       if (cellText.length !== cell.length) {
         throw new Error(
-          `Value for [${cell.fieldId}:${cell.name}] ${value} should be of length ${cell.length}`
+          `Value for [${cell.fieldId}:${cell.name}] ${cellText} should be of length ${cell.length}. Got ${cellText.length}`
         )
       }
 

@@ -68,16 +68,14 @@ function fakeCustomerOrVendor(): CustomerOrVendor {
 }
 
 function fakeItem(): DocumentItem {
-  const quantity = '1'
-  //faker.string.numeric({
-  //   allowLeadingZeros: true,
-  //   length: { min: 1, max: 10 },
-  // })
-  const unitPriceExcludingVAT = '100'
-  //   faker.string.numeric({
-  //   allowLeadingZeros: true,
-  //   length: { min: 1, max: 10 },
-  // })
+  const quantity = faker.string.numeric({
+    allowLeadingZeros: true,
+    length: { min: 1, max: 4 },
+  })
+  const unitPriceExcludingVAT = faker.string.numeric({
+    allowLeadingZeros: true,
+    length: { min: 1, max: 4 },
+  })
   const sum = +quantity * +unitPriceExcludingVAT
   const lineDiscount = '0' //(sum / faker.number.int({ min: 2, max: 4 })).toFixed(0)
   const lineTotal = `${sum - +lineDiscount}`
@@ -107,6 +105,7 @@ function fakePayment(): DocumentPayment {
   ].includes(paymentMethod)
   const isCredit = paymentMethod === PaymentMethod.CREDIT_CARD
 
+  const amount = faker.number.float({ min: 1, max: 999999, precision: 0.2 })
   return {
     lineNumber: faker.number.int({ min: 1, max: 9999 }),
     paymentMethod,
@@ -115,10 +114,7 @@ function fakePayment(): DocumentPayment {
     accountNumber: isCheck ? faker.number.int({ min: 1, max: 15 }) : undefined,
     checkNumber: isCheck ? faker.number.int({ min: 1, max: 10 }) : undefined,
     paymentDueDate: isCheckOrCredit ? faker.date.past() : undefined,
-    amount: faker.string.numeric({
-      allowLeadingZeros: true,
-      length: { min: 1, max: 14 },
-    }),
+    amount: amount.toString(),
     creditCardCompany: isCredit
       ? faker.helpers.enumValue(CreditCardCompany)
       : undefined,
@@ -130,26 +126,29 @@ function fakePayment(): DocumentPayment {
 }
 
 function fakeDocument(): DocumentRecord {
-  const documentSumBeforeDiscount = faker.string.numeric({
-    allowLeadingZeros: true,
-    length: { min: 1, max: 14 },
+  const items = [fakeItem(), fakeItem()]
+
+  const documentSumBeforeDiscount = items.reduce(
+    (acc, v) => acc + +v.lineTotal,
+    0
+  )
+  const discount = faker.number.float({
+    min: 1,
+    max: 9999,
+    precision: 0.2,
   })
-  const discount = faker.string.numeric({
-    allowLeadingZeros: true,
-    length: { min: 1, max: 14 },
+  const documentSumAfterDiscountExcludingVat =
+    documentSumBeforeDiscount - discount
+
+  const vatSum = faker.number.float({
+    min: 1,
+    max: 9999999999,
+    precision: 0.2,
   })
-  const documentSumAfterDiscountExcludingVat = `${
-    +documentSumBeforeDiscount - +discount
-  }`
-  const vatSum = faker.string.numeric({
-    allowLeadingZeros: true,
-    length: { min: 1, max: 14 },
-  })
-  const documentSumIncludingVat = `${
-    +documentSumAfterDiscountExcludingVat + +vatSum
-  }`
+  const documentSumIncludingVat = documentSumAfterDiscountExcludingVat + vatSum
+
   return {
-    documentType: faker.helpers.enumValue(DocumentType),
+    documentType: DocumentType.INVOICE_RECEIPT, //faker.helpers.enumValue(DocumentType),
     documentNumber: faker.string.numeric({
       allowLeadingZeros: true,
       length: { min: 1, max: 20 },
@@ -161,20 +160,19 @@ function fakeDocument(): DocumentRecord {
     valueDate: faker.date.past(),
     // finalSumInForeignCurrency?: number
     // currencyCode?: string
-    documentSumBeforeDiscount,
-    discount,
-    documentSumAfterDiscountExcludingVat,
-    vatSum,
-    documentSumIncludingVat,
-    deductionAtSourceSum: faker.string.numeric({
-      allowLeadingZeros: true,
-      length: { min: 1, max: 11 },
-    }),
+    documentSumBeforeDiscount: documentSumBeforeDiscount.toString(),
+    discount: discount.toString(),
+    documentSumAfterDiscountExcludingVat: Math.abs(
+      documentSumAfterDiscountExcludingVat
+    ).toString(),
+    vatSum: vatSum.toString(),
+    documentSumIncludingVat: documentSumIncludingVat.toString(),
+    deductionAtSourceSum: faker.number.float({ min: 1, max: 11 }).toString(),
     linkField: '1234',
     isCanceled: faker.number.binary().toString(),
 
     // D110
-    items: [fakeItem(), fakeItem()],
+    items,
 
     // D120
     payments: [fakePayment(), fakePayment(), fakePayment(), fakePayment()],

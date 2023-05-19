@@ -160,7 +160,7 @@ const header: Row = {
       startAt: 186,
       endAt: 186,
       required: false,
-      default: ' ',
+      default: 1,
     },
     {
       fieldId: 1015,

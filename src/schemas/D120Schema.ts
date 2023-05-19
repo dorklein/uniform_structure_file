@@ -173,6 +173,7 @@ export const D120Schema: Row<DocumentPayment> = {
       length: 15,
       startAt: 104,
       endAt: 118,
+      decimalPlaces: 2,
       type: 'positive',
       name: 'amount',
       description: 'סכום השורה',
