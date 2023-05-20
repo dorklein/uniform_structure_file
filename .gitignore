@@ -6,3 +6,7 @@ node_modules
 
 INI.txt
 BKMVDATA.txt
+
+*.zip
+*.tar.gz
+*.tgz
