@@ -157,6 +157,34 @@ export class DataGenerator extends BaseGenerator {
     this.createRow<DocumentPayment>(bkmvdataSchema.D120, getValue, item)
   }
 
+  // private createB100Row(document: DocumentRecord, item: DocumentPayment): void {
+  //   const getValue = (cell: Cell<DocumentPayment>) => {
+  //     return (
+  //       this.computedValues(cell) ??
+  //       getNestedValue(item, cell.name) ??
+  //       getNestedValue(document, cell.name) ??
+  //       getNestedValue(this.input, cell.name) ??
+  //       cell.default
+  //     )
+  //   }
+  //
+  //   this.createRow<DocumentPayment>(bkmvdataSchema.B100, getValue, item)
+  // }
+  //
+  // private createB110Row(document: DocumentRecord, item: DocumentPayment): void {
+  //   const getValue = (cell: Cell<DocumentPayment>) => {
+  //     return (
+  //       this.computedValues(cell) ??
+  //       getNestedValue(item, cell.name) ??
+  //       getNestedValue(document, cell.name) ??
+  //       getNestedValue(this.input, cell.name) ??
+  //       cell.default
+  //     )
+  //   }
+  //
+  //   this.createRow<DocumentPayment>(bkmvdataSchema.B110, getValue, item)
+  // }
+
   private createBKMVDATABody(): void {
     for (const document of this.input.documents) {
       this.createC100Row(document)
