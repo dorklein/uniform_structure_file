@@ -1,11 +1,9 @@
-import * as fs from 'fs/promises'
 import { dateToMMDDhhmm } from './utils/dates'
 import { IniGenerator } from './generator/iniGenerator'
 import { DataGenerator } from './generator/dataGenerator'
 import { customAlphabet } from 'nanoid'
 import * as path from 'path'
 import { UniformStructureInput } from './types'
-import { createFakeInput } from '../tests/integrations/fakes/inputs'
 import { zip } from 'zip-a-folder'
 
 function getDirPath(input: UniformStructureInput): string {
@@ -16,9 +14,7 @@ function getDirPath(input: UniformStructureInput): string {
   )}`
 }
 
-export async function main() {
-  const input: UniformStructureInput = createFakeInput()
-
+export async function generateUSF(input: UniformStructureInput) {
   const nanoid = customAlphabet('123456789', 15)
   const uuid = nanoid()
 

@@ -1,8 +1,11 @@
 import { describe, test } from '@jest/globals'
-import { main } from '../../src'
+import { generateUSF } from '../../src'
+import { UniformStructureInput } from '../../src/types'
+import { createFakeInput } from './fakes/inputs'
 
 describe('create', () => {
   test('Should work', async () => {
-    await main()
+    const input: UniformStructureInput = createFakeInput()
+    await generateUSF(input)
   })
 })
