@@ -187,7 +187,7 @@ export interface AccountingActions {
   details?: string
   date: Date
   valueDate: Date
-  accountKey?: string
+  accountKey: string
   contraAccountKey?: string
   actionType: ActionType
   currencyCode?: string

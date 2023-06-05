@@ -148,7 +148,7 @@ export const B100Schema: Row<AccountingActions> = {
             validator: isValidDate,
         },
         {
-            required: false,
+            required: true,
             length: 15,
             startAt: 173,
             endAt: 187,
