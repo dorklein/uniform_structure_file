@@ -1,8 +1,8 @@
-import {HasBranches, Row} from '../types'
+import {AccountingActions, HasBranches, Row} from '../types'
 import {isValidCurrencyCode, isValidDate} from '../utils/validators'
 
 
-export const B100Schema: Row = {
+export const B100Schema: Row<AccountingActions> = {
     cells: [
         {
             default: 'B100',

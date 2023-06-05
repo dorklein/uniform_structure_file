@@ -1,7 +1,7 @@
-import { HasBranches, Row, SoftwareAccountingType } from '../types'
+import {AccountingAccount, HasBranches, Row, SoftwareAccountingType} from '../types'
 import { isOptionalValidCurrencyCode } from '../utils/validators'
 
-export const B110Schema: Row = {
+export const B110Schema: Row<AccountingAccount> = {
   cells: [
     {
       default: 'B110',

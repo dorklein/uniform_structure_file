@@ -1,6 +1,6 @@
-import { Row } from '../types'
+import {InventoryItem, Row} from '../types'
 
-export const M100Schema: Row = {
+export const M100Schema: Row<InventoryItem> = {
   cells: [
     {
       default: 'M100',
