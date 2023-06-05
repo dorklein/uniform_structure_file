@@ -3,6 +3,7 @@ import { IniGenerator } from './generator/iniGenerator'
 import { DataGenerator } from './generator/dataGenerator'
 import { customAlphabet } from 'nanoid'
 import * as path from 'path'
+import * as fs from 'fs/promises'
 import { UniformStructureInput } from './types'
 import { zip } from 'zip-a-folder'
 
@@ -35,6 +36,9 @@ export async function generateUSF(input: UniformStructureInput) {
 
   // zip
   await zip('OPENFRMT', `OPENFRMT.zip`)
+
+  // Delete the folder
+  await fs.rm('OPENFRMT', { recursive: true, force: true})
 }
 
 // main()
