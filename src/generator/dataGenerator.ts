@@ -129,8 +129,12 @@ export class DataGenerator extends BaseGenerator {
     this.createRow<DocumentRecord>(bkmvdataSchema.C100, getValue, document)
   }
 
-  private createD110Row(document: DocumentRecord, item: DocumentItem): void {
+  private createD110Row(document: DocumentRecord, item: DocumentItem, index: number): void {
     const getValue = (cell: Cell<DocumentItem>) => {
+      if (cell.name === 'lineNumber') {
+        return index + 1
+      }
+
       return (
         this.computedValues(cell) ??
         getNestedValue(item, cell.name) ??
@@ -143,8 +147,12 @@ export class DataGenerator extends BaseGenerator {
     this.createRow<DocumentItem>(bkmvdataSchema.D110, getValue, item)
   }
 
-  private createD120Row(document: DocumentRecord, item: DocumentPayment): void {
+  private createD120Row(document: DocumentRecord, item: DocumentPayment, index: number): void {
     const getValue = (cell: Cell<DocumentPayment>) => {
+      if (cell.name === 'lineNumber') {
+        return index + 1
+      }
+
       return (
         this.computedValues(cell) ??
         getNestedValue(item, cell.name) ??
@@ -189,13 +197,12 @@ export class DataGenerator extends BaseGenerator {
     for (const document of this.input.documents) {
       this.createC100Row(document)
 
-      for (const item of document.items) {
-        this.createD110Row(document, item)
-      }
-
-      for (const payment of document.payments) {
-        this.createD120Row(document, payment)
-      }
+      document.items.forEach((item, index) => {
+        this.createD110Row(document, item, index)
+      })
+      document.payments.forEach((payment, index) => {
+        this.createD120Row(document, payment, index)
+      })
     }
   }
 
