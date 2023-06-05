@@ -1,9 +1,9 @@
 import { describe, test, expect } from '@jest/globals'
 import * as fs from 'fs/promises'
-import { createINI } from '../../src/createINI'
-import { fullInputMock, inputMock } from './mocks/inputs'
-import { createBKMVDATA } from '../../src/createBKMVDATA'
+import { inputMock } from './mocks/inputs'
 import { createFakeInput } from './fakes/inputs'
+import {IniGenerator} from "../../src/generator/iniGenerator";
+import {DataGenerator} from "../../src/generator/dataGenerator";
 
 const expectedLineLength = {
   'INI.TXT': {
@@ -31,7 +31,8 @@ describe('Line length', () => {
   test('INI.TXT', async () => {
     const filePath = 'tests/INI.txt'
     // Generate the file
-    await createINI(inputMock, filePath)
+    const input = createFakeInput()
+    await new IniGenerator(input, '', filePath, {} as any).saveToFile()
 
     // Read the file
     const data = await fs.readFile(filePath, 'utf8')
@@ -49,7 +50,7 @@ describe('Line length', () => {
     const filePath = 'tests/BKMVDATA.txt'
     // Generate the file
     const input = createFakeInput()
-    await createBKMVDATA(input, filePath)
+    await new DataGenerator(input, '', filePath).saveToFile()
 
     // Read the file
     const data = await fs.readFile(filePath, 'utf8')

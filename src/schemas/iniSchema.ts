@@ -171,7 +171,7 @@ const header: Row = {
       startAt: 187,
       endAt: 195,
       required: false,
-      validator: isValidSSN,
+      validator: isOptionalValidDate,
     },
     {
       fieldId: 1016,
