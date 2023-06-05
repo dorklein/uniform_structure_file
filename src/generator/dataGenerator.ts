@@ -1,11 +1,13 @@
 import {BaseGenerator} from './baseGenerator'
 import {
+    AccountingAccount,
+    AccountingActions,
     BKMVDATARowsCount,
     Cell,
     DocumentItem,
     DocumentPayment,
     DocumentRecord,
-    DocumentType,
+    DocumentType, InventoryItem,
     UniformStructureInput,
 } from '../types'
 import {getNestedValue} from '../utils/objs'
@@ -167,35 +169,53 @@ export class DataGenerator extends BaseGenerator {
         this.createRow<DocumentPayment>(bkmvdataSchema.D120, getValue, item)
     }
 
-    // private createB100Row(document: DocumentRecord, item: DocumentPayment): void {
-    //   const getValue = (cell: Cell<DocumentPayment>) => {
-    //     return (
-    //       this.computedValues(cell) ??
-    //       getNestedValue(item, cell.name) ??
-    //       getNestedValue(document, cell.name) ??
-    //       getNestedValue(this.input, cell.name) ??
-    //       cell.default
-    //     )
-    //   }
-    //
-    //   this.createRow<DocumentPayment>(bkmvdataSchema.B100, getValue, item)
-    // }
-    //
-    // private createB110Row(document: DocumentRecord, item: DocumentPayment): void {
-    //   const getValue = (cell: Cell<DocumentPayment>) => {
-    //     return (
-    //       this.computedValues(cell) ??
-    //       getNestedValue(item, cell.name) ??
-    //       getNestedValue(document, cell.name) ??
-    //       getNestedValue(this.input, cell.name) ??
-    //       cell.default
-    //     )
-    //   }
-    //
-    //   this.createRow<DocumentPayment>(bkmvdataSchema.B110, getValue, item)
-    // }
+    private createB100Row(item: AccountingActions): void {
+      const getValue = (cell: Cell<AccountingActions>) => {
+        return (
+          this.computedValues(cell) ??
+          getNestedValue(item, cell.name) ??
+          getNestedValue(this.input, cell.name) ??
+          cell.default
+        )
+      }
+
+      this.createRow<AccountingActions>(bkmvdataSchema.B100, getValue, item)
+    }
+
+    private createB110Row(item: AccountingAccount): void {
+      const getValue = (cell: Cell<AccountingAccount>) => {
+        return (
+          this.computedValues(cell) ??
+          getNestedValue(item, cell.name) ??
+          getNestedValue(this.input, cell.name) ??
+          cell.default
+        )
+      }
+
+      this.createRow<AccountingAccount>(bkmvdataSchema.B110, getValue, item)
+    }
+
+    private createM100Row(item: InventoryItem): void {
+      const getValue = (cell: Cell<InventoryItem>) => {
+        return (
+          this.computedValues(cell) ??
+          getNestedValue(item, cell.name) ??
+          getNestedValue(this.input, cell.name) ??
+          cell.default
+        )
+      }
+
+      this.createRow<InventoryItem>(bkmvdataSchema.M100, getValue, item)
+    }
 
     private createBKMVDATABody(): void {
+        for (const action of this.input.accountingActions) {
+            this.createB100Row(action)
+        }
+        for (const account of this.input.accountingAccounts) {
+            this.createB110Row(account)
+        }
+
         for (const document of this.input.documents) {
             this.createC100Row(document)
 
@@ -208,6 +228,10 @@ export class DataGenerator extends BaseGenerator {
             document.payments.forEach((payment, index) => {
                 this.createD120Row(document, payment, index)
             })
+        }
+
+        for (const item of this.input.inventoryItems) {
+            this.createM100Row(item)
         }
     }
 

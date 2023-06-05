@@ -270,6 +270,10 @@ export interface UniformStructureInput {
   compressionSoftware: string
 
   documents: DocumentRecord[]
+
+  accountingActions: AccountingActions[]
+  accountingAccounts: AccountingAccount[]
+  inventoryItems: InventoryItem[]
 }
 
 export type CellType =
@@ -322,9 +326,9 @@ export interface BKMVDATASchema {
   C100: Row<DocumentRecord>
   D110: Row<DocumentItem>
   D120: Row<DocumentPayment>
-  B100: Row
-  B110: Row
-  M100: Row
+  B100: Row<AccountingActions>
+  B110: Row<AccountingAccount>
+  M100: Row<InventoryItem>
 }
 
 export interface BKMVDATARowsCount extends Dictionary<number> {
