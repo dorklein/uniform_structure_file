@@ -214,7 +214,7 @@ export const C100Schema: Row<DocumentRecord> = {
                 if (!value) return false
 
                 let expected: number
-                if ([DocumentType.RECEIPT, DocumentType.INVOICE_RECEIPT, DocumentType.DONATION_RECEIPT].includes(item.documentType)) {
+                if ([DocumentType.RECEIPT, DocumentType.DONATION_RECEIPT].includes(item.documentType)) {
                     expected = item.payments.reduce(
                         (acc, item) => acc + +item.amount,
                         0
