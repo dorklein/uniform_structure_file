@@ -110,7 +110,7 @@ export const M100Schema: Row<InventoryItem> = {
       startAt: 193,
       endAt: 204,
       decimalPlaces: 2,
-      type: 'string',
+      type: 'positive',
       name: 'openingBalance',
       description: 'יתרת הפריט לתחילת\nהחתך',
       fieldId: 1460,
