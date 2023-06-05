@@ -1,9 +1,9 @@
 {
   "name": "uniform_structure_file",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "",
   "main": "dist/index.js",
-"types": "dist/index.d.ts",
+  "types": "dist/index.d.ts",
   "scripts": {
     "run": "tsup src/index.ts --watch --onSuccess \"node dist/index.js\"",
     "test": "jest",
