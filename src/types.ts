@@ -1,3 +1,5 @@
+import exp from "constants";
+
 export type Dictionary<T = unknown> = { [key: string]: T }
 
 export enum HasBranches {
@@ -338,4 +340,31 @@ export interface BKMVDATARowsCount extends Dictionary<number> {
   D110: number
   D120: number
   M100: number
+}
+
+export type RecordTypeCode = 'A100' | 'B100' | 'B110' | 'C100' | 'D110' | 'D120' | 'M100' | 'Z900'
+
+export interface RecordTypesDetail {
+  code: RecordTypeCode
+  label: string
+  totalRecords: number
+}
+
+export interface DataValidationOutput {
+  documentTypeNumber: DocumentType
+  documentTypeLabel: string
+  quantity: number
+  sum: number
+
+}
+export interface USFResult {
+  businessName: string
+  businessTaxId: number
+  fromDate: Date
+  toDate: Date
+  savePath: string
+  softwareName: string
+  generatedAt: Date
+  recordTypesDetails: RecordTypesDetail[]
+  dataValidationOutput: DataValidationOutput[]
 }
