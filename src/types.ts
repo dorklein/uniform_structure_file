@@ -139,7 +139,7 @@ export enum ActionType {
 export interface CustomerOrVendor {
   taxId?: number | undefined
   name: string
-  address?: CustomerOrVendorAddress
+  address?: CustomerOrVendorAddress | undefined
   phone?: string | undefined
   key: string | undefined
 }

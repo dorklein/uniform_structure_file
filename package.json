@@ -1,13 +1,25 @@
 {
   "name": "uniform_structure_file",
-  "version": "1.1.4",
+  "version": "1.1.5",
   "description": "",
   "main": "dist/index.js",
+  "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "run": "tsup src/index.ts --watch --onSuccess \"node dist/index.js\"",
     "test": "jest",
-    "build": "tsc"
+    "build": "tsup",
+    "dev": "tsup --watch"
   },
   "keywords": [],
   "author": "",
