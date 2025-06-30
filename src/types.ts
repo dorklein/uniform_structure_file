@@ -8,24 +8,24 @@ export enum HasBranches {
 }
 
 export interface BaseAddress {
-  street?: string
-  houseNumber?: string
-  city?: string
-  zipCode?: string
+  street?: string | undefined
+  houseNumber?: string | undefined
+  city?: string | undefined
+  zipCode?: string | undefined
 }
 export interface BusinessAddress extends BaseAddress {}
 export interface CustomerOrVendorAddress extends BaseAddress {
-  country?: string
-  countryCode?: string
+  country?: string | undefined
+  countryCode?: string | undefined
 }
 
 export interface BusinessData {
   taxId: number
-  companyId?: number // ח״פ
+  companyId?: number | undefined // ח״פ
   name: string
   address?: BusinessAddress
   hasBranches: HasBranches
-  branchId?: string
+  branchId?: string | undefined
 }
 
 export enum SoftwareType {
@@ -137,28 +137,28 @@ export enum ActionType {
   CREDIT = 2,
 }
 export interface CustomerOrVendor {
-  taxId?: number
+  taxId?: number | undefined
   name: string
   address?: CustomerOrVendorAddress
-  phone?: string
-  key: string
+  phone?: string | undefined
+  key: string | undefined
 }
 
 export interface DocumentItem {
   // documentType: DocumentType
   // documentNumber: string
   lineNumber: number
-  documentTypeBase?: number
-  documentNumberBase?: string
+  documentTypeBase?: number | undefined
+  documentNumberBase?: string | undefined
   transactionType: TransactionType
-  catalogId?: string
-  description: string
-  manufacturerName?: string
-  manufacturerSerialNumber?: string
-  unitOfMeasure?: string
+  catalogId?: string | undefined
+  description: string | undefined
+  manufacturerName?: string | undefined
+  manufacturerSerialNumber?: string | undefined
+  unitOfMeasure?: string | undefined
   quantity: string
   unitPriceExcludingVAT: string
-  lineDiscount?: string
+  lineDiscount?: string | undefined
   lineTotal: string
   lineVATRate: number
 }
@@ -166,40 +166,40 @@ export interface DocumentItem {
 export interface DocumentPayment {
   lineNumber: number
   paymentMethod: PaymentMethod
-  bankId?: number
-  branchId?: number
-  accountNumber?: number
-  checkNumber?: number
-  paymentDueDate?: Date
+  bankId?: number | undefined
+  branchId?: number | undefined
+  accountNumber?: number | undefined
+  checkNumber?: number | undefined
+  paymentDueDate?: Date | undefined
   amount: string
-  creditCardCompany?: CreditCardCompany
-  creditCardName?: string
-  creditCardTransactionType?: CreditCardTransactionType
+  creditCardCompany?: CreditCardCompany | undefined
+  creditCardName?: string | undefined
+  creditCardTransactionType?: CreditCardTransactionType | undefined
 }
 
 // B100
 export interface AccountingActions {
   transactionNumber: number
   transactionLineNumber: number
-  dish?: number
-  reference?: string
-  referenceDocumentType?: DocumentType
-  reference2?: string
-  reference2DocumentType?: DocumentType
-  details?: string
+  dish?: number | undefined
+  reference?: string | undefined
+  referenceDocumentType?: DocumentType | undefined
+  reference2?: string | undefined
+  reference2DocumentType?: DocumentType | undefined
+  details?: string | undefined
   date: Date
   valueDate: Date
   accountKey: string
-  contraAccountKey?: string
+  contraAccountKey?: string | undefined
   actionType: ActionType
-  currencyCode?: string
+  currencyCode?: string | undefined
   amount: string
   foreignCurrencyAmount?: string
-  quantity?: string
-  matchField1?: string
-  matchField2?: string
+  quantity?: string | undefined
+  matchField1?: string | undefined
+  matchField2?: string | undefined
   entryDate: Date
-  userWhoMadeTheAction?: string
+  userWhoMadeTheAction?: string | undefined
 }
 
 export interface AccountingAccount {
@@ -208,28 +208,28 @@ export interface AccountingAccount {
   accountName: string
   accountBalanceCode: string
   accountBalanceCodeDescription: string
-  centerAccount?: string
+  centerAccount?: string | undefined
   openingBalance: string
   totalDebit: string
   totalCredit: string
-  govClassificationCode?: number
-  openingBalanceInForeignCurrency?: string
+  govClassificationCode?: number | undefined
+  openingBalanceInForeignCurrency?: string | undefined
 }
 
 export interface InventoryItem {
   //  M100
-  universalItemCode?: string
-  supplierItemCode?: string
+  universalItemCode?: string | undefined
+  supplierItemCode?: string | undefined
   internalItemCode: string
   itemName: string
-  sortingCode?: string
-  sortingCodeDescription?: string
+  sortingCode?: string | undefined
+  sortingCodeDescription?: string | undefined
   unitOfMeasure: string
   openingBalance: string
   totalEntries: string
   totalOutputs: string
-  costPriceOutside?: number
-  costPrice?: number
+  costPriceOutside?: number | undefined
+  costPrice?: number | undefined
 }
 export interface DocumentRecord {
   documentType: DocumentType
@@ -237,18 +237,18 @@ export interface DocumentRecord {
   documentCreationDate: Date
   documentCreationTime: Date
   customerOrVendor: CustomerOrVendor
-  matchingField?: string
-  isCanceled?: string
+  matchingField?: string | undefined
+  isCanceled?: string | undefined
   documentDate: Date
   valueDate: Date
-  finalSumInForeignCurrency?: number
-  currencyCode?: string
+  finalSumInForeignCurrency?: number | undefined
+  currencyCode?: string | undefined
   documentSumBeforeDiscount: string
-  discount?: string
-  documentSumAfterDiscountExcludingVat?: string
-  vatSum?: string
-  documentSumIncludingVat?: string
-  deductionAtSourceSum?: string
+  discount?: string | undefined
+  documentSumAfterDiscountExcludingVat?: string | undefined
+  vatSum?: string | undefined
+  documentSumIncludingVat?: string | undefined
+  deductionAtSourceSum?: string | undefined
   linkField: string
 
   // D110
@@ -261,15 +261,15 @@ export interface DocumentRecord {
 export interface UniformStructureInput {
   software: SoftwareData
   business: BusinessData
-  taxYear?: number
-  dataRangeStartDate?: Date
-  dataRangeEndDate?: Date
+  taxYear?: number | undefined
+  dataRangeStartDate?: Date | undefined
+  dataRangeEndDate?: Date | undefined
   processStartDate: Date
   processStartTime: Date
   languageCode: LanguageCode
-  leadingCurrency: string
-  encoding: FileEncoding
-  compressionSoftware: string
+  leadingCurrency: string | undefined
+  encoding: FileEncoding | undefined
+  compressionSoftware: string | undefined
 
   documents: DocumentRecord[]
 
@@ -295,8 +295,8 @@ export interface Cell<T = undefined> {
   length: number
   startAt: number
   endAt: number
-  decimalPlaces?: number
-  default?: string | number
+  decimalPlaces?: number | undefined
+  default?: string | number | undefined
 
   /**
    * @param input The input object
