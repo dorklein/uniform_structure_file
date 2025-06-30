@@ -4,7 +4,37 @@ import {DataGenerator} from './generator/dataGenerator'
 import {customAlphabet} from 'nanoid'
 import * as path from 'path'
 import * as fs from 'fs/promises'
-import {DocumentType, RecordTypeCode, UniformStructureInput, USFResult} from './types'
+import {
+  DocumentType, 
+  RecordTypeCode, 
+  UniformStructureInput, 
+  USFResult,
+  BusinessData,
+  SoftwareData,
+  DocumentRecord,
+  AccountingActions,
+  AccountingAccount,
+  InventoryItem,
+  CustomerOrVendor,
+  DocumentItem,
+  DocumentPayment,
+  HasBranches,
+  SoftwareType,
+  SoftwareAccountingType,
+  RequiredAccountingBalance,
+  LanguageCode,
+  FileEncoding,
+  TransactionType,
+  PaymentMethod,
+  CreditCardCompany,
+  CreditCardTransactionType,
+  ActionType,
+  RecordTypesDetail,
+  DataValidationOutput,
+  BaseAddress,
+  BusinessAddress,
+  CustomerOrVendorAddress
+} from './types'
 import {zip} from 'zip-a-folder'
 import {documentTypeLabel, recordTypeLabel} from "./utils/heLables";
 
@@ -93,6 +123,43 @@ export async function generateUSF(input: UniformStructureInput): Promise<USFResu
     await fs.rm('OPENFRMT', {recursive: true, force: true})
 
     return getResults(input, iniFilePath, dataGenerator)
+}
+
+// Export all types for users
+export type {
+  RecordTypeCode,
+  UniformStructureInput,
+  USFResult,
+  BusinessData,
+  SoftwareData,
+  DocumentRecord,
+  AccountingActions,
+  AccountingAccount,
+  InventoryItem,
+  CustomerOrVendor,
+  DocumentItem,
+  DocumentPayment,
+  RecordTypesDetail,
+  DataValidationOutput,
+  BaseAddress,
+  BusinessAddress,
+  CustomerOrVendorAddress
+}
+
+// Export enums as values
+export {
+  HasBranches,
+  SoftwareType,
+  SoftwareAccountingType,
+  RequiredAccountingBalance,
+  LanguageCode,
+  FileEncoding,
+  DocumentType,
+  TransactionType,
+  PaymentMethod,
+  CreditCardCompany,
+  CreditCardTransactionType,
+  ActionType
 }
 
 // main()
