@@ -11,7 +11,9 @@ export function isValidDate(value: ValidatorValue) {
 
   const today = new Date()
 
-  return value.getTime() <= today.getTime() || `Date ${value} is in the future`
+  const valueDate = new Date(value.getFullYear(), value.getMonth(), value.getDate())
+  const todayDate = new Date(today.getFullYear(), today.getMonth(), today.getDate())
+  return valueDate <= todayDate || `Date ${value} is in the future`
 }
 
 export function isOptionalValidDate(value: ValidatorValue) {
