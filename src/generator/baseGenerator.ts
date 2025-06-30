@@ -8,7 +8,7 @@ import {
 import { isString, padByType } from '../utils/strings'
 import fs from 'fs/promises'
 import * as path from 'path'
-import * as iconv from 'iconv-lite'
+import iconv from 'iconv-lite'
 
 export abstract class BaseGenerator {
   #input: UniformStructureInput
