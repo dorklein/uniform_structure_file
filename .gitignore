@@ -10,3 +10,5 @@ BKMVDATA.txt
 *.zip
 *.tar.gz
 *.tgz
+
+.DS_Store

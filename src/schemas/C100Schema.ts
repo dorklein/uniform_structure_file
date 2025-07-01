@@ -293,7 +293,7 @@ export const C100Schema: Row<DocumentRecord> = {
 
                 return (
                     value === `${expected}` ||
-                    'documentSumIncludingVat must be equal to documentSumAfterDiscountExcludingVat + vatSum'
+                    `documentSumIncludingVat must be equal to documentSumAfterDiscountExcludingVat + vatSum - expected(${expected}), actual(${value})`
                 )
             },
         },
