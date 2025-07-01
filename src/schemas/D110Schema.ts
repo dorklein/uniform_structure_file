@@ -205,8 +205,8 @@ export const D110Schema: Row<DocumentItem> = {
           +quantity * +unitPriceExcludingVAT - +(lineDiscount ?? 0)
 
         return (
-          value === `${expected}` ||
-          `[1267:lineTotal] Expected ${expected}. Got ${value}`
+          Number(value).toFixed(2) === `${expected.toFixed(2)}` ||
+          `[1267:lineTotal] Expected ${expected.toFixed(2)}. Got ${Number(value).toFixed(2)}`
         )
       },
     },
