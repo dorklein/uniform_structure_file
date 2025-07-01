@@ -292,7 +292,7 @@ export const C100Schema: Row<DocumentRecord> = {
                 const expected = documentSumAfterDiscountExcludingVat + vatSum
 
                 return (
-                    value === `${expected}` ||
+                    Number(value).toFixed(2) === `${expected.toFixed(2)}` ||
                     `documentSumIncludingVat must be equal to documentSumAfterDiscountExcludingVat + vatSum - expected(${expected}), actual(${value})`
                 )
             },
