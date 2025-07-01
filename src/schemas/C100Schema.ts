@@ -226,8 +226,8 @@ export const C100Schema: Row<DocumentRecord> = {
                     )
                 }
                 return (
-                    +value === expected ||
-                    `documentSumBeforeDiscount should be ${expected} (accumulation of the doc's items lineTotal) but got ${value}`
+                    Number(value).toFixed(2) === `${expected.toFixed(2)}` ||
+                    `documentSumBeforeDiscount should be ${expected.toFixed(2)} (accumulation of the doc's items lineTotal) but got ${Number(value).toFixed(2)}`
                 )
             },
         },
