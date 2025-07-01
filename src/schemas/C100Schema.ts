@@ -258,8 +258,8 @@ export const C100Schema: Row<DocumentRecord> = {
                 const expected = beforeDiscount - discount
 
                 return (
-                    value === `${expected}` ||
-                    `documentSumAfterDiscountExcludingVat (${value}) must be equal to documentSumBeforeDiscount (${beforeDiscount}) - discount (${discount}) = ${expected}`
+                    Number(value).toFixed(2) === `${expected.toFixed(2)}` ||
+                    `documentSumAfterDiscountExcludingVat (${value}) must be equal to documentSumBeforeDiscount (${beforeDiscount}) - discount (${discount}) = ${expected.toFixed(2)}`
                 )
             },
         },
