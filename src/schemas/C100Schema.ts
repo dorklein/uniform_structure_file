@@ -218,7 +218,7 @@ export const C100Schema: Row<DocumentRecord> = {
                     expected = item.payments.reduce(
                         (acc, item) => acc + +item.amount,
                         0
-                    )
+                    ) - +(item.vatSum ?? 0)
                 } else {
                     expected = item.items.reduce(
                         (acc, item) => acc + +item.lineTotal,
